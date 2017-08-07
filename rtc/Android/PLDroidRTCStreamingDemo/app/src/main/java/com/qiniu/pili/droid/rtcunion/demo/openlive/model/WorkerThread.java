@@ -175,7 +175,7 @@ public class WorkerThread extends Thread {
         ensureRtcEngineReadyLock();
         if (isOwner) {
             // if the broadcaster is owner, you can set the publish url below and set the owner as true
-            String json = "{\"streamName\":\"rtmp://pili-publish.liujingbo.echohu.top/liujingbo/liujingbo_zhibo\", \"owner\": true}";
+            String json = "{\"streamName\":\"rtmp://xxx\", \"owner\": true}";
             mUNRTCEngine.joinChannel(null, channel, json, uid);
         } else {
             // if the broadcaster is not owner, you can set the optionalInfo as null
