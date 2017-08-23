@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -199,12 +198,12 @@ public class PKViceAnchorActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage("正在加入连麦 ... ");
         mProgressDialog.show();
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startConferenceInternal();
             }
-        });
+        }).start();
         return true;
     }
 

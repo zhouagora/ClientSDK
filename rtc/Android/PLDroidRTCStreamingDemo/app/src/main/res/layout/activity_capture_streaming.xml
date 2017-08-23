@@ -155,23 +155,6 @@
         app:fab_labelStyle="@style/label_style"
         app:fab_labelsPosition="right" >
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/change_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickChangePicture"
-            android:visibility="gone"
-            app:fab_title="@string/button_change_picture_path"
-            app:fab_size="mini"/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/start_picture_streaming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickStartPictureStreaming"
-            app:fab_title="@string/button_toggle_picture_streaming"
-            app:fab_size="mini"/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/toggle_playback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

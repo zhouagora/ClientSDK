@@ -55,8 +55,6 @@
     <string name="button_subscribe">订阅视频</string>
     <string name="button_unsubscribe">取消订阅</string>
     <string name="button_adjust_bitrate">调整码率</string>
-    <string name="button_toggle_picture_streaming">图片推流</string>
-    <string name="button_change_picture_path">切换图片</string>
     <string name="button_start_playback">开启返听</string>
 
     <string name="others_muted">已静音其他人</string>

@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +35,7 @@ import com.qiniu.pili.droid.rtcstreaming.RTCUserEventListener;
 import com.qiniu.pili.droid.rtcstreaming.RTCVideoWindow;
 import com.qiniu.pili.droid.rtcstreaming.demo.R;
 import com.qiniu.pili.droid.rtcstreaming.demo.core.StreamUtils;
+import com.qiniu.pili.droid.streaming.AVCodecType;
 import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
 import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout;
 
@@ -144,7 +144,8 @@ public class ConferenceActivity extends AppCompatActivity {
         /**
          * Step 4: create streaming manager and set listeners
          */
-        mRTCConferenceManager = new RTCConferenceManager(getApplicationContext(), afl, mCameraPreviewFrameView);
+        AVCodecType codecType = isSwCodec ? AVCodecType.SW_VIDEO_WITH_SW_AUDIO_CODEC : AVCodecType.HW_VIDEO_YUV_AS_INPUT_WITH_HW_AUDIO_CODEC;
+        mRTCConferenceManager = new RTCConferenceManager(getApplicationContext(), afl, mCameraPreviewFrameView, codecType);
         mRTCConferenceManager.setConferenceStateListener(mRTCStreamingStateChangedListener);
         mRTCConferenceManager.setRemoteWindowEventListener(mRTCRemoteWindowEventListener);
         mRTCConferenceManager.setUserEventListener(mRTCUserEventListener);
@@ -230,12 +231,12 @@ public class ConferenceActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage("正在加入连麦 ... ");
         mProgressDialog.show();
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startConferenceInternal();
             }
-        });
+        }).start();
         return true;
     }
 
