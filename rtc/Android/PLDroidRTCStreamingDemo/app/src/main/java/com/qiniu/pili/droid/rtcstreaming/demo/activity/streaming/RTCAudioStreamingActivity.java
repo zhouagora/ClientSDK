@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -170,12 +169,12 @@ public class RTCAudioStreamingActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage("正在加入连麦 ... ");
         mProgressDialog.show();
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startConferenceInternal();
             }
-        });
+        }).start();
         return true;
     }
 
@@ -234,12 +233,12 @@ public class RTCAudioStreamingActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage("正在准备推流... ");
         mProgressDialog.show();
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startPublishStreamingInternal();
             }
-        });
+        }).start();
         return true;
     }
 

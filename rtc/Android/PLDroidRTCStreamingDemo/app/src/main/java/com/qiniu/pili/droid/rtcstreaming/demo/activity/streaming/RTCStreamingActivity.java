@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -80,8 +79,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
     private CheckBox mConferenceCheckBox;
     private FloatingActionButton mMuteSpeakerButton;
     private FloatingActionButton mBitrateAdjustButton;
-    private FloatingActionButton mChangePictureButton;
-    private FloatingActionButton mTogglePictureStreamingButton;
     private FloatingActionButton mTogglePlaybackButton;
 
     private Toast mToast = null;
@@ -110,10 +107,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
 
     private boolean mIsStatsEnabled = false;
 
-    private int mTimes = 0;
-    private boolean mIsPictureStreaming = false;
-
-    private String mRemoteUserId;
     private String mBitrateControl;
 
     private boolean mIsPlayingback = false;
@@ -159,16 +152,12 @@ public class RTCStreamingActivity extends AppCompatActivity {
         mConferenceCheckBox.setOnClickListener(mConferenceButtonClickListener);
         mMuteSpeakerButton = (FloatingActionButton) findViewById(R.id.muteSpeaker);
         mBitrateAdjustButton = (FloatingActionButton) findViewById(R.id.adjust_bitrate);
-        mChangePictureButton = (FloatingActionButton) findViewById(R.id.change_picture);
-        mTogglePictureStreamingButton = (FloatingActionButton) findViewById(R.id.start_picture_streaming);
         mTogglePlaybackButton = (FloatingActionButton) findViewById(R.id.toggle_playback);
 
         if (mRole == StreamUtils.RTC_ROLE_ANCHOR) {
             mConferenceCheckBox.setVisibility(View.VISIBLE);
         } else {
             mBitrateAdjustButton.setVisibility(View.GONE);
-            mChangePictureButton.setVisibility(View.GONE);
-            mTogglePictureStreamingButton.setVisibility(View.GONE);
             mTogglePlaybackButton.setVisibility(View.GONE);
         }
 
@@ -294,7 +283,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
                     .setAudioQuality(StreamingProfile.AUDIO_QUALITY_MEDIUM1)
                     .setEncoderRCMode(StreamingProfile.EncoderRCModes.BITRATE_PRIORITY)
                     .setFpsControllerEnable(true)
-                    .setPictureStreamingResourceId(R.drawable.pause_publish)
                     .setSendingBufferProfile(new StreamingProfile.SendingBufferProfile(0.2f, 0.8f, 3.0f, 20 * 1000))
                     .setBitrateAdjustMode(
                             mBitrateControl.equals("auto") ? StreamingProfile.BitrateAdjustMode.Auto
@@ -379,9 +367,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
     }
 
     public void onClickCaptureFrame(View v) {
-        if (isPictureStreaming()) {
-            return;
-        }
         mRTCStreamingManager.captureFrame(new RTCFrameCapturedCallback() {
             @Override
             public void onFrameCaptureSuccess(Bitmap bitmap) {
@@ -399,9 +384,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
     }
 
     public void onClickPreviewMirror(View v) {
-        if (isPictureStreaming()) {
-            return;
-        }
         if (mRTCStreamingManager.setPreviewMirror(!mIsPreviewMirror)) {
             mIsPreviewMirror = !mIsPreviewMirror;
             showToast(getString(R.string.mirror_success), Toast.LENGTH_SHORT);
@@ -409,9 +391,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
     }
 
     public void onClickEncodingMirror(View v) {
-        if (isPictureStreaming()) {
-            return;
-        }
         if (mRTCStreamingManager.setEncodingMirror(!mIsEncodingMirror)) {
             mIsEncodingMirror = !mIsEncodingMirror;
             showToast(getString(R.string.mirror_success), Toast.LENGTH_SHORT);
@@ -419,9 +398,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
     }
 
     public void onClickSwitchCamera(View v) {
-        if (isPictureStreaming()) {
-            return;
-        }
         mCurrentCamFacingIndex = (mCurrentCamFacingIndex + 1) % CameraStreamingSetting.getNumberOfCameras();
         CameraStreamingSetting.CAMERA_FACING_ID facingId;
         if (mCurrentCamFacingIndex == CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_BACK.ordinal()) {
@@ -486,30 +462,6 @@ public class RTCStreamingActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickStartPictureStreaming(View v) {
-        if (!mIsPublishStreamStarted) {
-            showToast("请先开始直播！", Toast.LENGTH_SHORT);
-            return;
-        }
-        if (mIsPictureStreaming) {
-            mIsPictureStreaming = false;
-            mChangePictureButton.setVisibility(View.GONE);
-            mRTCStreamingManager.togglePictureStreaming();
-            mRTCStreamingManager.subscribeVideoStream(mRemoteUserId);
-        } else {
-            mIsPictureStreaming = true;
-            mStreamingProfile.setPictureStreamingFps(10);
-            mChangePictureButton.setVisibility(View.VISIBLE);
-            mRTCStreamingManager.togglePictureStreaming();
-            mRTCStreamingManager.unsubscribeVideoStream(mRemoteUserId);
-        }
-    }
-
-    public void onClickChangePicture(View v) {
-        mRTCStreamingManager.setPictureStreamingResourceId(mTimes % 2 == 0 ? R.drawable.qiniu_logo : R.drawable.pause_publish);
-        mTimes++;
-    }
-
     public void onClickTogglePlayback(View v) {
         if (!mIsPublishStreamStarted) {
             showToast("请先开始直播！", Toast.LENGTH_SHORT);
@@ -562,25 +514,18 @@ public class RTCStreamingActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean isPictureStreaming() {
-        if (mIsPictureStreaming) {
-            Toast.makeText(RTCStreamingActivity.this, "is picture streaming, operation failed!", Toast.LENGTH_SHORT).show();
-        }
-        return mIsPictureStreaming;
-    }
-
     private boolean startConference() {
         if (mIsConferenceStarted) {
             return true;
         }
         mProgressDialog.setMessage("正在加入连麦 ... ");
         mProgressDialog.show();
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startConferenceInternal();
             }
-        });
+        }).start();
         return true;
     }
 
@@ -641,12 +586,12 @@ public class RTCStreamingActivity extends AppCompatActivity {
         }
         mProgressDialog.setMessage("正在准备推流... ");
         mProgressDialog.show();
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startPublishStreamingInternal();
             }
-        });
+        }).start();
         return true;
     }
 
@@ -882,15 +827,11 @@ public class RTCStreamingActivity extends AppCompatActivity {
         @Override
         public void onRemoteWindowAttached(RTCVideoWindow window, String remoteUserId) {
             Log.d(TAG, "onRemoteWindowAttached: " + remoteUserId);
-            mRemoteUserId = remoteUserId;
         }
 
         @Override
         public void onRemoteWindowDetached(RTCVideoWindow window, String remoteUserId) {
             Log.d(TAG, "onRemoteWindowDetached: " + remoteUserId);
-            if (!mIsPictureStreaming) {
-                mRemoteUserId = null;
-            }
         }
 
         @Override
