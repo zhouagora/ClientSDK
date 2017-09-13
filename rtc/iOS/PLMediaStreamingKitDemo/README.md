@@ -28,13 +28,13 @@
 |appId|由 Agora 签发给应用开发者|
 |返回值|AgoraLiveKit 类的一个对象|
 
-
+<br/>
 #### 销毁直播对象(destroy)
 ```bash
 + (void)destroy;
 ```
 
-
+<br/>
 #### 开始本地视频预览 (startPreview)
 ```bash
 - (int)startPreview:(VIEW_CLASS *_Nonnull)view
