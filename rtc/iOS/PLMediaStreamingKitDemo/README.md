@@ -117,7 +117,7 @@ AgoraLiveEncryptionModeAES256XTS | 2
 AgoraLiveEncryptionModeAES128ECB | 3
 <br/>
 
-离开频道 (leaveChannel)
+#### 离开频道 (leaveChannel)
 
 ```
 - (int)leaveChannel;
@@ -213,9 +213,7 @@ AgoraErrorCodeVcmEncoderSetError | 1603
 ```
 - (void)liveKit:(AgoraLiveKit *_Nonnull)kit didJoinChannel:(NSString *_Nonnull)channel withUid:(NSUInteger)uid elapsed:(NSInteger) elapsed;
 ```
-<br/>
-
-用户加入频道的事件。
+>用户加入频道的事件。
 
 参数 | 描述
 ---|---
@@ -223,6 +221,8 @@ kit	| 直播包
 channel	| 频道名称
 uid	| 远端用户id
 elapsed	| 从会话开始起流逝的时间
+
+<br/>
 
 ####  本地用户已离开频道 (liveKitDidLeaveChannel)
 
@@ -241,6 +241,7 @@ kit	| 直播包
 - (void)liveKit:(AgoraLiveKit *_Nonnull)kit didRejoinChannel:(NSString *_Nonnull)channel withUid:(NSUInteger)uid elapsed:(NSInteger) elapsed;
 ```
 <br/>
+
 参数|描述
 ---|---
 kit|直播包
@@ -379,11 +380,6 @@ bitrate|视频编码码率
 
 ##### 纵屏配置表：
 
-header 1 | header 2
-
-row 1 col 1 | row 1 col 2
-row 2 col 1 | row 2 col 2
-
 
 高|	宽|	fps|	kbps|	描述
 ---|---|---|---|---
@@ -461,6 +457,8 @@ row 2 col 1 | row 2 col 2
 参数 | 描述
 ---|---
 delegate | 
+
+<br/>
 
 #### 初始化推流器 (initWithLiveKit)
 
