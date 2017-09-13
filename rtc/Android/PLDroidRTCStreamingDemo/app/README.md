@@ -1,4 +1,4 @@
-### [Agora官网 电话 400 632 6626](https://www.agora.io/cn/) 
+### [Agora官网 | 电话 400 632 6626](https://www.agora.io/cn/) 
 
 
 # 直播 API - Android
