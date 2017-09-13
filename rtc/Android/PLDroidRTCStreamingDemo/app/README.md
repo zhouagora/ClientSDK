@@ -40,6 +40,9 @@ Constants 类	|用于为直播和通信定义常量的公共类。
 public static String getSdkVersion()
 ```
 <br/>
+
+
+
 #### 创建 LiveEngine 实例 (createLiveEngine)
 
 ```
@@ -101,6 +104,9 @@ uid	|在频道中的每个用户独一无二的 ID 。
 public abstract int leaveChannel();
 ```
 <br/>
+
+
+
 #### 开始本地视频预览 (startPreview)
 
 ```
@@ -122,6 +128,9 @@ RENDER_MODE_HIDDEN|1|如果视频大小与显示窗口不同，大则裁剪小�
 RENDER_MODE_FIT	|2|如果视频大小与显示窗口不同，按比例调整视频大小以适配窗口。
 RENDER_MODE_ADAPTIVE|3|	如果两个呼叫者使用相同的屏幕模式，即同时使用纵屏或同时使用横屏， RENDER_MODE_HIDDEN 模式适用。<br/>如果两个呼叫者使用不同的屏幕模式，即一个纵屏一个横屏， RENDER_MODE_FIT 模式适用。
 <br/>
+
+
+
 #### 停止本地视频预览 (stopPreview)
 
 ```
