@@ -29,6 +29,7 @@
 |返回值|AgoraLiveKit 类的一个对象|
 
 <br/>
+
 #### 销毁直播对象(destroy)
 ```bash
 + (void)destroy;
