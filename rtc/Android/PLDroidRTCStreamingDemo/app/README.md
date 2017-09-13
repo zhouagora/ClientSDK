@@ -21,45 +21,6 @@ Constants 类	|用于为直播和通信定义常量的公共类。
 - 通过 setParameters() 方法调用 Agora 的私有接口。
 >您可以通过调用 getRtcEngine() 方法获取一个 RtcEngine 类的实例。有关 RtcEngine 类提供的 API 的更多详情，请见 直播 API - Android
 
-# LiveEngine 类
-该类为直播的基础类，用于管理频道。LiveEngine 类包括以下函数：
-- getSdkVersion()
-- createLiveEngine()
-- getRtcEngine()
-- destroy()
-- joinChannel()
-- leaveChannel()
-- startPreview()
-- stopPreview()
-- 获得 SDK 版本 (getSdkVersion)
-- public static String getSdkVersion()
-- 该方法用于获取SDK的版本。
-
-#### 创建 LiveEngine 实例 (createLiveEngine)
-
-```
-public static LiveEngine createLiveEngine(Context context, String appId, LiveEngineHandler handler)
-```
-
-参数	|描述
----|---
-context	|Android 行为的上下文。
-appId	|由 Agora 签发给应用程序开发者的 App ID 。若您的开发包中没有 App ID ，请向 Agora 重新申请一个。
-handler	|LiveEngineHandler 是一个为 LiveEngine 类提供回调的抽象类。
-<br/>
-
-#### 获取 RTCEngine (getRtcEngine)
-
-```
-public abstract RtcEngine getRtcEngine();
-```
->RtcEngine 类目前仍然开放。Agora 的老用户和高级编程人员如希望调用以下功能可以使用该类：
-
-- Fullband
-- 混音特效
-- 视频自采集
-- 通过 setParameters() 方法调用 Agora 的私有接口。
->有关 RtcEngine 类的更多详情，请见 [直播 API - Android](http://test-docs.agora.io/cn/live_phase1/user_guide/API/android_live_1_12.html)
 
 # LiveEngine 类
 该类为直播的基础类，用于管理频道。LiveEngine 类包括以下函数：
@@ -202,11 +163,6 @@ public LiveSubscriberHandler getLiveSubscriberHandler()
 ```
 public void subscribe(int uid, int mediaType, Object view, int renderMode, int videoType)
 ```
-
-header 1 | header 2
----|---
-row 1 col 1 | row 1 col 2
-row 2 col 1 | row 2 col 2
 
 
 参数|	描述
@@ -472,6 +428,7 @@ errorCode | ERR\_OK = 0<br/>ERR\_FAILED = 1<br/>ERR\_INVALID\_ARGUMENT = 2<br/>E
 public void onLeaveChannel()
 ```
 <br/>
+
 #### 加入频道回调 (onJoinChannel)
 
 ```
@@ -635,7 +592,7 @@ rotation	|视频新的旋转角度。它的值包括： 0, 90, 180, or 270 。�
 
 <br/>
 
-#### LivePublisherHandler 类
+# LivePublisherHandler 类
 该抽象类为主播提供回调。 LivePublisherHandler 类包括以下回调：
 
 - onPublishSuccess()
