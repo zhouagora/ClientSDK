@@ -89,9 +89,15 @@ public static LiveEngine createLiveEngine(Context context, String appId, LiveEng
 context	|Android 行为的上下文。
 appId	|由 Agora 签发给应用程序开发者的 App ID 。若您的开发包中没有 App ID ，请向 Agora 重新申请一个。
 handler	|LiveEngineHandler 是一个为 LiveEngine 类提供回调的抽象类。
+
 <br/>
+
 #### 获取 RTCEngine (getRtcEngine)
+
+```
 public abstract RtcEngine getRtcEngine();
+```
+
 该方法用于获取一个 RtcEngine 的实例。
 
 
@@ -105,6 +111,7 @@ public abstract RtcEngine getRtcEngine();
 >有关 RtcEngine 类的更多详情，请见 [直播 API - Android](http://test-docs.agora.io/cn/live_phase1/user_guide/API/android_live_1_12.html)
 
 <br/>
+
 #### 销毁 (destroy)
 ```
 public abstract void destroy();
@@ -1171,9 +1178,6 @@ AUDIO_SAMPLE_RATE_TYPE_48000	|48000
 VIDEO_CODEC_PROFILE_TYPE_BASELINE	|66
 VIDEO_CODEC_PROFILE_TYPE_MAIN	|77
 VIDEO_CODEC_PROFILE_TYPE_HIGH	|100
-
-
-
 
 
 
